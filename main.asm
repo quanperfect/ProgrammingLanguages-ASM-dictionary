@@ -4,7 +4,7 @@ global _start
 %include "dict.inc"
 section .rodata	
 %include "words.inc"
-greetings: db 'The greatest NASM dictionary about ITMO welcomes you, what would you like to search for?: ', 0
+greetings: db '(after review)The greatest NASM dictionary about ITMO welcomes you, what would you like to search for?: ', 0
 notvalidmsg: db 'ERROR: Your request is too long -> not valid (just like your grades)', 0
 notfoundmsg: db 'FAIL: ITMO dictionary knows nothing about this requested word, are you trying to make ITMO look bad?!', 0
 
@@ -28,10 +28,17 @@ _start:
     call find_word
     cmp rax, 0 ; if rax is 0 then word (key) & definition not found
     jz .not_found ; if ZF = 1 (means not found) then jump .not_found
-    mov rdi, rax ; copy definition from rax to rdi for future print_string call
 
-    call print_string
-	jmp .end
+		add rax, 8 ; moving pointer for key
+		push rax ; pushing pointer to key
+		mov rdi, [rsp] ; key address to rdi for calling string_length
+		call string_length ; rdi - key
+		pop rdi ; poping pointer to key
+		add rdi, rax ; pointer to key + key_length
+		inc rdi ; gotta remember the null terminator
+
+    call print_string ; printing definition yay ;)
+		jmp .end
 
 .not_found:
     mov rdi, notfoundmsg
