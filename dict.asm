@@ -22,7 +22,7 @@ find_word:
 
 		.not_found:
 				mov rsi, [rsi]
-				cmp [rsi], word 0 		; check if a pointer to the next dict. element is 0 
+				cmp rsi, 0 		; check if a pointer to the next dict. element is 0 
    		  jne find_word 			; next element
   		  xor rax, rax 			; if a point to the next dict. element is 0 that means we are on a last element
   		  ret 
