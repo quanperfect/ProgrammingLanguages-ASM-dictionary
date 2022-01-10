@@ -6,7 +6,6 @@ section .text
 ; rsi - pointer to the dictionary
 
 find_word:
-		mov rsi, [rsi]
     push rdi 
     push rsi
     add rsi, 8 				; moving pointer to a key
@@ -22,6 +21,7 @@ find_word:
         ret     
 
 		.not_found:
+				mov rsi, [rsi]
 				cmp [rsi], word 0 		; check if a pointer to the next dict. element is 0 
    		  jne find_word 			; next element
   		  xor rax, rax 			; if a point to the next dict. element is 0 that means we are on a last element
